@@ -11,18 +11,10 @@ pipeline {
   }
    //added comment
    stages {
-      stage('Build') {
+      stage('Git') {
          steps {
             // Get some code from a GitHub repository
             git "${env.gitrepo}"
-
-            // Run Maven on a Unix agent.
-            sh '''
-            cd ./javaee/hello-world-rest
-            mvn -Dmaven.test.failure.ignore=true clean package
-            '''
-            // To run Maven on a Windows agent, use
-            // bat "mvn -Dmaven.test.failure.ignore=true clean package"
          }
       }
        stage ('Artifactory configuration') {
@@ -45,6 +37,17 @@ pipeline {
                     serverId: "JAY_AWS_ARTIFACTORY_SERVER",
                     releaseRepo: "libs-release",
                     snapshotRepo: "libs-snapshot"
+                )
+            }
+        }
+        stage ('Exec Maven') {
+            steps {
+                rtMavenRun (
+                    tool: maven, // Tool name from Jenkins configuration
+                    pom: './javaee/hello-world-rest/pom.xml',
+                    goals: 'clean install',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
                 )
             }
         }
