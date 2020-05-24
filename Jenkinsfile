@@ -51,7 +51,7 @@ pipeline {
         stage ('Publish build info to Artifactory') {
             steps {
                 rtPublishBuildInfo (
-                    serverId: "ARTIFACTORY_SERVER"
+                    serverId: "JAY_AWS_ARTIFACTORY_SERVER"
                 )
             }
         }
