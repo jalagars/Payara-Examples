@@ -6,6 +6,8 @@ pipeline {
    }
    environment {
       gitrepo = "https://github.com/jalagars/Payara-Examples.git"
+      artifactoryCredential = 'JAY_AWS_ARTIFACTORY_SERVER'
+      artifactoryServerUrl = 'http://ec2-3-92-243-157.compute-1.amazonaws.com:8082/artifactory'
   }
    //added comment
    stages {
@@ -27,8 +29,8 @@ pipeline {
             steps {
                 rtServer (
                     id: "JAY_AWS_ARTIFACTORY_SERVER",
-                    url: SERVER_URL,
-                    credentialsId: CREDENTIALS
+                    url: artifactoryServerUrl,
+                    credentialsId: artifactoryCredential
                 )
 
                 rtMavenDeployer (
